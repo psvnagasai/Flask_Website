@@ -3,7 +3,10 @@
     {
         "local_server": "True",
         "local_uri": "mysql://root:@localhost/huecomundo",
-        "prod_uri": "mysql://root:@localhost/huecomundo"
+        "prod_uri": "mysql://root:@localhost/huecomundo",
+
+        "gmail-user": "user@gmail.com",
+        "gmail-password": "gmailpass"
 
     }
     

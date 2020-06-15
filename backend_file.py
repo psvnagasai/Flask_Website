@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 from datetime import datetime
 import json
 
@@ -10,7 +11,15 @@ with open('config.json', 'r') as c:
 local_server = params["local_server"]
 
 app = Flask(__name__)
+app.config.update(
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = '465',
+    MAIL_USE_SSL = True,
+    MAIL_USERNAME = params["gmail-user"],
+    MAIL_PASSWORD = params["gmail-password"]
+)
 
+mail = Mail(app)
 if(local_server):
     app.config['SQLALCHEMY_DATABASE_URI'] = params['local_uri']
 else:
@@ -29,9 +38,23 @@ class Contacts(db.Model):
     email = db.Column(db.String(20),  nullable=False)
 
 
+class Projects(db.Model):
+    serial_number = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False)
+    slug = db.Column(db.String(21), nullable=False)
+    project_name = db.Column(db.String(120), nullable=False)
+    content = db.Column(db.String(12), nullable=True)
+
+
 @app.route("/")
 def homePage():
     return render_template('index.html')
+
+
+@app.route("/post/<string:post_slug>", methods=['GET'])
+def post_route(post_slug):
+    post = Projects.query.filter_by(slug=post_slug).first()
+    return render_template('post.html', params=params, post=post)
 
 @app.route("/index")
 def index():
@@ -55,6 +78,10 @@ def contact():
         entry = Contacts(name= name, phone_no = phone, msg = message, date = datetime.now(),  email = email)
         db.session.add(entry)
         db.session.commit()
+        mail.send_message('New message from ' + name, sender=email, 
+                recipients = [params['gmail-user']],
+                body = message + "\n" + phone
+                )
     return render_template('contact.html')
 
 app.run(debug=True)
