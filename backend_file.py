@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from datetime import datetime
@@ -69,7 +69,6 @@ def dashboard():
         projects = Projects.query.all()
         return render_template('dashboard.html', params = params, projects = projects)
 
-
     if request.method == 'POST':
         username = request.form.get('uname')
         
@@ -97,7 +96,29 @@ def edit(serial_number):
     if ('user' in session and session['user'] == params["admin_user"]):
         if request.method == 'POST':
             box_title = request.form.get('title')
+            projname = request.form.get('projname')
+            slug = request.form.get('slug')
+            content = request.form.get('content')
+            link = request.form.get('link')
 
+            if serial_number == '0':
+                project = Projects(title = box_title, slug = slug , 
+                project_name = projname, content = content, site = link)
+                db.session.add(project)
+                db.session.commit()
+            else:
+                project = Projects.query.filter_by(serial_number=serial_number).first()
+                project.title = box_title
+                project.slug = slug
+                project.project_name = projname
+                project.content = content
+                project.site = link
+                db.session.commit()
+                return redirect('/edit/' + serial_number)
+                
+        project = Projects.query.filter_by(serial_number=serial_number).first()
+
+        return render_template('edit.html', params= params, project = project)
 
 @app.route("/contact", methods = ['GET', 'POST'])
 def contact():
