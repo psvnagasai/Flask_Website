@@ -44,6 +44,7 @@ class Projects(db.Model):
     slug = db.Column(db.String(21), nullable=False)
     project_name = db.Column(db.String(120), nullable=False)
     content = db.Column(db.String(12), nullable=True)
+    site = db.Column(db.String(120), nullable=True)
 
 
 @app.route("/")
@@ -59,6 +60,10 @@ def project_route(project_slug):
 @app.route("/index")
 def index():
     return render_template('index.html', params = params)
+
+@app.route("/login")
+def login():
+    return render_template('login.html', params = params)
 
 @app.route("/projects")
 def projects():
