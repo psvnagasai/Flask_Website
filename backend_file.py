@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from datetime import datetime
@@ -11,6 +11,8 @@ with open('config.json', 'r') as c:
 local_server = params["local_server"]
 
 app = Flask(__name__)
+app.secret_key = 'helloworld'
+
 app.config.update(
     MAIL_SERVER = 'smtp.gmail.com',
     MAIL_PORT = '465',
@@ -61,18 +63,29 @@ def project_route(project_slug):
 def index():
     return render_template('index.html', params = params)
 
-@app.route("/login")
-def login():
+@app.route("/dashboard", methods=['GET', 'POST'])
+def dashboard():
+    if ('user' in session and session['user'] == params["admin_user"]):
+        return render_template('dashboard.html', params = params)
+
+
+    if request.method == 'POST':
+        username = request.form.get('uname')
+        userpass = request.form.get('pass')
+        if(username == params['admin_user'] and userpass == params['admin_password']):
+            session['user'] = username
+            return render_template('dashboard.html', params = params)
+            
     return render_template('login.html', params = params)
 
 @app.route("/projects")
 def projects():
     projects = Projects.query.filter_by().all()[0:params['no_of_posts']]
-    return render_template('projects.html', projects = projects)
+    return render_template('projects.html', projects = projects, params=params)
 
 @app.route("/whatever")
 def whatever():
-    return render_template('whatever.html')
+    return render_template('whatever.html', params=params)
 
 @app.route("/contact", methods = ['GET', 'POST'])
 def contact():
@@ -88,6 +101,6 @@ def contact():
                 recipients = [params['gmail-user']],
                 body = message + "\n" + phone
                 )
-    return render_template('contact.html')
+    return render_template('contact.html', params=params)
 
 app.run(debug=True)
