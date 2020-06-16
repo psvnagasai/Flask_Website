@@ -71,7 +71,9 @@ def dashboard():
 
     if request.method == 'POST':
         username = request.form.get('uname')
+        
         userpass = request.form.get('pass')
+        print(username+' '+userpass)
         if(username == params['admin_user'] and userpass == params['admin_password']):
             session['user'] = username
             return render_template('dashboard.html', params = params)

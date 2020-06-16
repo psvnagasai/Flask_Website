@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 <div style="padding-left: 700px; padding-right: 700px; padding-top: 100px;" class="text-center text-light">
-    <form class="form-signin">
+    <form class="form-signin " method="post">
         {% set fname = 'imgs/'+  params['login_img']  %}
         <img class="mb-4" src="{{url_for('static', filename = fname)}}" alt="" width="150" height="150">
         <h1 class="h3 mb-3 font-weight-normal">Admin Login</h1>
