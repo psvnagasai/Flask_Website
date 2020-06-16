@@ -1,54 +1,23 @@
 {% extends "layout.html" %}
 {% block body %}
 
-    <div class="container py-4">
-        <div class="row">
-        
-<!-- PROJECT 1 BEGINS-->
+<div class="container py-4">
+    <div class="row py-2 pb-5">
 
-            <div class="col-sm">
-                <a href="/post/first-post " target="_blank>
-                    <!-- Card -->
-                    <div class="card card-cascade narrower shad">
-
-                        <!-- Card image -->
-                        <div class="view view-cascade gradient-card-header purple-gradient">
-
-                            <!-- Title -->
-                            <h2 class="card-header-title text-center pt-2">Project 1</h2>
-                            <!-- Subtitle -->
-                            <h5 class="mt-4 pb-3 pt-2 text-center">Report Card Generator</h5>
-
-                        </div>
-
-                        <!-- Card content -->
-                        <div class="card-body card-body-cascade text-center">
-
-                            <!-- Text -->
-                            <p class="card-text">This is a Project which gave the output of report cards in .Pdf format, taking input from a csv file.</p>
-
-                        </div>
-
-                    </div>
-                    <!-- Card -->
-                </a>
-            </div>
-
-<!-- PROJECT 1 ENDS-->
-
-<!-- PROJECT 2 BEGINS-->
-
-            <div class="col-sm">
+        <!-- PROJECT 1 BEGINS-->
+    {% for project in projects %}
+        <div class="col-sm">
+            <a href="/project/{{project.slug}}", target="_blank">
                 <!-- Card -->
-                <div class="card card-cascade narrower">
+                <div class="card card-cascade narrower shad">
 
                     <!-- Card image -->
                     <div class="view view-cascade gradient-card-header purple-gradient">
 
                         <!-- Title -->
-                        <h2 class="card-header-title text-center">Project 2</h2>
+                        <h2 class="card-header-title text-center pt-2">{{ project.title }}</h2>
                         <!-- Subtitle -->
-                        <h5 class="mb-0 pb-3 pt-2 text-center">Follow me</h5>
+                        <h5 class="mt-4 pb-3 pt-2 text-center">{{ project.project_name }}</h5>
 
                     </div>
 
@@ -56,48 +25,18 @@
                     <div class="card-body card-body-cascade text-center">
 
                         <!-- Text -->
-                        <p class="card-text">This is something about Project 2.</p>
+                        <p class="card-text">{{ project.content[0:43] }}...</p>
 
                     </div>
 
                 </div>
                 <!-- Card -->
-            </div>
-
-<!-- PROJECT 2 ENDS-->
-
-<!-- PROJECT 3 BEGINS-->
-
-            <div class="col-sm">
-                <!-- Card -->
-                <div class="card card-cascade narrower">
-
-                    <!-- Card image -->
-                    <div class="view view-cascade gradient-card-header purple-gradient">
-
-                        <!-- Title -->
-                        <h2 class="card-header-title text-center">Project 3</h2>
-                        <!-- Subtitle -->
-                        <h5 class="mb-0 pb-3 pt-2 text-center">Follow me</h5>
-
-                    </div>
-
-                    <!-- Card content -->
-                    <div class="card-body card-body-cascade text-center">
-
-                        <!-- Text -->
-                        <p class="card-text">This is something about project 3.</p>
-
-                    </div>
-
-                </div>
-                <!-- Card -->
-            </div>
-
-<!-- PROJECT 3 ENDS -->
-
+            </a>
         </div>
     </div>
+    {% endfor %}
+        <!-- PROJECT 1 ENDS-->    
+</div>
 
 </body>
 

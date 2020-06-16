@@ -48,21 +48,22 @@ class Projects(db.Model):
 
 @app.route("/")
 def homePage():
-    return render_template('index.html')
+    return render_template('index.html' , params = params)
 
 
-@app.route("/post/<string:post_slug>", methods=['GET'])
-def post_route(post_slug):
-    post = Projects.query.filter_by(slug=post_slug).first()
-    return render_template('post.html', params=params, post=post)
+@app.route("/project/<string:project_slug>", methods=['GET'])
+def project_route(project_slug):
+    project = Projects.query.filter_by(slug=project_slug).first()
+    return render_template('project.html', params=params, project=project)
 
 @app.route("/index")
 def index():
-    return render_template('index.html')
+    return render_template('index.html', params = params)
 
 @app.route("/projects")
 def projects():
-    return render_template('projects.html')
+    projects = Projects.query.filter_by().all()[0:params['no_of_posts']]
+    return render_template('projects.html', projects = projects)
 
 @app.route("/whatever")
 def whatever():

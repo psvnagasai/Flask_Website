@@ -6,7 +6,10 @@
         "prod_uri": "mysql://root:@localhost/huecomundo",
 
         "gmail-user": "user@gmail.com",
-        "gmail-password": "gmailpass"
+        "gmail-password": "gmailpass",
+        "about": "This is just a personal website of PSV Naga Sai which achieves nothing!",
+        "no_of_posts": 5
+
 
     }
     
