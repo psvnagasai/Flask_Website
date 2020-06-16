@@ -66,7 +66,8 @@ def index():
 @app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
     if ('user' in session and session['user'] == params["admin_user"]):
-        return render_template('dashboard.html', params = params)
+        projects = Projects.query.all()
+        return render_template('dashboard.html', params = params, projects = projects)
 
 
     if request.method == 'POST':
@@ -76,7 +77,8 @@ def dashboard():
         print(username+' '+userpass)
         if(username == params['admin_user'] and userpass == params['admin_password']):
             session['user'] = username
-            return render_template('dashboard.html', params = params)
+            projects = Projects.query.all()
+            return render_template('dashboard.html', params = params, projects = projects)
             
     return render_template('login.html', params = params)
 
@@ -88,6 +90,14 @@ def projects():
 @app.route("/whatever")
 def whatever():
     return render_template('whatever.html', params=params)
+
+
+@app.route("/edit/<string:serial_number>", methods = ['GET', 'POST'])
+def edit(serial_number):
+    if ('user' in session and session['user'] == params["admin_user"]):
+        if request.method == 'POST':
+            box_title = request.form.get('title')
+
 
 @app.route("/contact", methods = ['GET', 'POST'])
 def contact():
