@@ -63,6 +63,9 @@ def project_route(project_slug):
 def index():
     return render_template('index.html', params = params)
 
+
+# LOGIN PAGE FOR THE ADMIN
+
 @app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
     if ('user' in session and session['user'] == params["admin_user"]):
@@ -73,13 +76,29 @@ def dashboard():
         username = request.form.get('uname')
         
         userpass = request.form.get('pass')
-        print(username+' '+userpass)
         if(username == params['admin_user'] and userpass == params['admin_password']):
             session['user'] = username
             projects = Projects.query.all()
             return render_template('dashboard.html', params = params, projects = projects)
             
     return render_template('login.html', params = params)
+
+#LOGOUT OF THE SESSION
+
+@app.route("/logout")
+def logout():
+    session.pop('user')
+    return redirect('/dashboard')
+
+# DELETE A PROJECT FROM DATABASE
+
+@app.route("/delete/<string:serial_number>", methods = ['GET', 'POST'])
+def delete(serial_number):
+    if ('user' in session and session['user'] == params["admin_user"]):
+        projects = Projects.query.filter_by(serial_number = serial_number).first()
+        db.session.delete(projects)
+        db.session.commit()  
+    return redirect('/dashboard')
 
 @app.route("/projects")
 def projects():
@@ -90,6 +109,8 @@ def projects():
 def whatever():
     return render_template('whatever.html', params=params)
 
+
+#ADD OR EDIT A PROJECT
 
 @app.route("/edit/<string:serial_number>", methods = ['GET', 'POST'])
 def edit(serial_number):
@@ -105,7 +126,8 @@ def edit(serial_number):
                 project = Projects(title = box_title, slug = slug , 
                 project_name = projname, content = content, site = link)
                 db.session.add(project)
-                db.session.commit()
+                db.session.commit()   
+
             else:
                 project = Projects.query.filter_by(serial_number=serial_number).first()
                 project.title = box_title
@@ -118,7 +140,7 @@ def edit(serial_number):
                 
         project = Projects.query.filter_by(serial_number=serial_number).first()
 
-        return render_template('edit.html', params= params, project = project)
+        return render_template('edit.html', params= params, project = project, serial_number = serial_number)
 
 @app.route("/contact", methods = ['GET', 'POST'])
 def contact():

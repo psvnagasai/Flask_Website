@@ -13,7 +13,7 @@
 class="py-3 my-3">
   <h3>Basic Actions</h1>
   <a href="/edit/0"><button class="btn btn-primary m-0">Add New Project</button></a>
-  <a href="/edit/0"><button class="btn btn-primary m-0">Logout</button></a>
+  <a href="/logout"><button class="btn btn-primary m-0">Logout</button></a>
 
 </div>
 
@@ -38,7 +38,7 @@ class="py-3 my-3">
         <td>{{project.serial_number}}</td>
         <td>{{project.project_name}}</td>
         <td><a href="/edit/{{project.serial_number}}"><button class="btn btn-primary mx-0">Edit</button></a></td>
-        <td><button class="btn btn-primary m-0">Delete</button></td>
+        <td><a href="/delete/{{project.serial_number}}"><button class="btn btn-primary m-0">Delete</button></a></td>
       </tr>
       {% endfor %}
 

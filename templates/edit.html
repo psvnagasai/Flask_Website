@@ -12,11 +12,11 @@
 class="py-3 my-3">
   <h3>Basic Actions</h1>
   <a href="/dashboard"><button class="btn btn-primary m-0">Dashboard Home</button></a>
-  <a href="/edit/0"><button class="btn btn-primary m-0">Logout</button></a>
+  <a href="/logout"><button class="btn btn-primary m-0">Logout</button></a>
 
 </div>
 
-<form class="container bg-light py-3 rounded" name="sentMessage" id="contactForm" action="/edit/{{project.serial_number}}" method="post" novalidate>
+<form class="container bg-light py-3 rounded" name="sentMessage" id="contactForm" action="/edit/{{serial_number}}" method="post" novalidate>
     <div class="control-group">
         <div class="form-group floating-label-form-group controls">
             <label class="font-weight-bold pl-1">Title</label>
