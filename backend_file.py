@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from datetime import datetime
 import json
+import math
 
 
 with open('config.json', 'r') as c:
@@ -100,10 +101,26 @@ def delete(serial_number):
         db.session.commit()  
     return redirect('/dashboard')
 
-@app.route("/projects")
+@app.route("/projects/")
 def projects():
-    projects = Projects.query.filter_by().all()[0:params['no_of_posts']]
-    return render_template('projects.html', projects = projects, params=params)
+    projects = Projects.query.filter_by().all()
+    last = math.ceil(len(projects)/int(params['no_of_projects']))
+    page = request.args.get('page')
+    if(not str(page).isnumeric()):
+        page = 1
+    page = int(page)
+    projects = projects[ (page-1)*int(params['no_of_projects']) : (page-1)*int(params['no_of_projects']) + int(params['no_of_projects']) ]
+    if(page==1):
+        prev = "#"
+        next = "/projects/?page="+ str(page+1)
+    elif(page==last):
+        prev = "/projects/?page="+ str(page-1)
+        next = "#"
+    else:
+        prev = "/projects/?page="+ str(page-1)
+        next = "/projects/?page="+ str(page+1)
+
+    return render_template('projects.html', projects = projects, params=params, prev = prev, next = next)
 
 @app.route("/whatever")
 def whatever():

@@ -2,10 +2,10 @@
 {% block body %}
 
 <div class="container py-4">
-    <div class="row py-2 pb-5">
-
+    
         <!-- PROJECT 1 BEGINS-->
     {% for project in projects %}
+    <div class="row py-2 pb-5">
         <div class="col-sm">
             <a href="/project/{{project.slug}}", target="_blank">
                 <!-- Card -->
@@ -33,9 +33,16 @@
                 <!-- Card -->
             </a>
         </div>
+    </div>
     {% endfor %}
         <!-- PROJECT 1 ENDS-->   
-    </div> 
+
+        <div class="clearfix">
+            <a href="{{prev}}"><button class="btn btn-primary m-0 float-left">&larr; Previous</button></a>
+            <a href="{{next}}"><button class="btn btn-primary m-0 float-right">Next &rarr;</button></a>
+
+        </div>
+
 </div>
 
 {% endblock %}
