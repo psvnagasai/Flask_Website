@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from datetime import datetime
@@ -85,14 +85,13 @@ def dashboard():
     return render_template('login.html', params = params)
 
 #LOGOUT OF THE SESSION
-
 @app.route("/logout")
 def logout():
     session.pop('user')
     return redirect('/dashboard')
 
-# DELETE A PROJECT FROM DATABASE
 
+# DELETE A PROJECT FROM DATABASE
 @app.route("/delete/<string:serial_number>", methods = ['GET', 'POST'])
 def delete(serial_number):
     if ('user' in session and session['user'] == params["admin_user"]):
@@ -100,6 +99,7 @@ def delete(serial_number):
         db.session.delete(projects)
         db.session.commit()  
     return redirect('/dashboard')
+
 
 @app.route("/projects/")
 def projects():
@@ -122,13 +122,13 @@ def projects():
 
     return render_template('projects.html', projects = projects, params=params, prev = prev, next = next)
 
+
 @app.route("/whatever")
 def whatever():
     return render_template('whatever.html', params=params)
 
 
 #ADD OR EDIT A PROJECT
-
 @app.route("/edit/<string:serial_number>", methods = ['GET', 'POST'])
 def edit(serial_number):
     if ('user' in session and session['user'] == params["admin_user"]):
@@ -159,6 +159,7 @@ def edit(serial_number):
 
         return render_template('edit.html', params= params, project = project, serial_number = serial_number)
 
+
 @app.route("/contact", methods = ['GET', 'POST'])
 def contact():
     if(request.method=='POST'):
@@ -169,9 +170,14 @@ def contact():
         entry = Contacts(name= name, phone_no = phone, msg = message, date = datetime.now(),  email = email)
         db.session.add(entry)
         db.session.commit()
-        mail.send_message('New message from ' + name, sender=email, 
-                recipients = [params['gmail-user']],
-                body = message + "\n" + phone)
+
+        #Automated mail sender, commented for privacy of mail id and password
+
+        # mail.send_message('New message from ' + name, sender=email, 
+        #         recipients = [params['gmail-user']],
+        #         body = message + "\n" + phone)
+
+        flash("Thanks for contacting me amigo! I will get back to you soon.", "success")
     return render_template('contact.html', params=params)
 
 app.run(debug=True)
