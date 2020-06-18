@@ -171,8 +171,7 @@ def contact():
         db.session.commit()
         mail.send_message('New message from ' + name, sender=email, 
                 recipients = [params['gmail-user']],
-                body = message + "\n" + phone
-                )
+                body = message + "\n" + phone)
     return render_template('contact.html', params=params)
 
 app.run(debug=True)
